@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halien Mars Moin</title>
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at top, #44206d, #100b20 70%);
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+.card {
+  width: 85%;
+  max-width: 360px;
+  padding: 25px;
+  border: 1px solid #8058b9;
+  border-radius: 24px;
+  background: #211636;
+  box-shadow: 0 0 30px #7539b566;
+}
+.alien { font-size: 80px; }
+h1 { color: #d9a5ff; }
+.points { font-size: 28px; margin: 20px; }
+button {
+  width: 100%;
+  padding: 14px;
+  margin: 7px 0;
+  border: 0;
+  border-radius: 12px;
+  background: #a65bff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+button:active { transform: scale(.97); }
+.small { color: #c8bddb; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="alien">👽</div>
+  <h1>HALIEN MARS MOIN</h1>
+  <p>Добре дошъл на Марс!</p>
+  <div class="points">🪙 <span id="points">0</span></div>
+  <button onclick="mine()">⛏️ Копай монети</button>
+  <button onclick="mission()">🚀 Дневна мисия</button>
+  <button onclick="invite()">👥 Покани приятел</button>
+  <p id="message">Готов ли си за мисията?</p>
+  <p class="small">HMMC • Марсианска експедиция</p>
+</div>
+<script>
+let points = Number(localStorage.getItem("hmmc_points") || 0);
+let lastMission = localStorage.getItem("hmmc_mission") || "";
+function update() {
+  document.getElementById("points").textContent = points;
+  localStorage.setItem("hmmc_points", points);
+}
+function mine() {
+  points += 1;
+  update();
+  document.getElementById("message").textContent =
+    "+1 марсианска точка!";
+}
+function mission() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (lastMission === today) {
+    document.getElementById("message").textContent =
+      "Днешната мисия вече е изпълнена!";
+    return;
+  }
+  points += 10;
+  lastMission = today;
+  localStorage.setItem("hmmc_mission", today);
+  update();
+  document.getElementById("message").textContent =
+    "Мисията е успешна! +10 точки";
+}
+function invite() {
+  const text = "Ела с мен на Марс! 👽 HMMC";
+  if (navigator.share) {
+    navigator.share({title: "Halien Mars Moin", text});
+  } else {
+    document.getElementById("message").textContent =
+      "Сподели HMMC с приятел!";
+  }
+}
+update();
+</script>
+</body>
+</html>
